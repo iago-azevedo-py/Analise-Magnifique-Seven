@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import os
 from io import StringIO
+import google.generativeai as genai
 
 # Funções de cache para otimização
 @st.cache_data
@@ -108,7 +109,7 @@ secao = st.sidebar.radio(
     "Selecione a seção:",
     ["🏠 Início", "📄 Resumo", "📖 Introdução", "📚 Referencial Teórico", 
      "🔬 Metodologia", "📊 Dados Coletados", "📈 Análise Estatística", 
-     "🔮 Regressão Linear", "📋 Quadros", "🎯 Conclusão", "📚 Referências"]
+     "🔮 Regressão Linear", "🤖 Assistente IA", "🎯 Conclusão", "📚 Referências"]
 )
 
 st.sidebar.markdown("---")
@@ -978,165 +979,375 @@ python coletar_dados.py
         """, language='bash')
 
 elif secao == "📈 Análise Estatística":
-    st.markdown('<div class="sub-header">📈 Análise Estatística Descritiva</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sub-header">📈 Análise Estatística</div>', unsafe_allow_html=True)
     
     caminho_retornos = os.path.join(os.path.dirname(__file__), 'dados_retornos.csv')
     
     if os.path.exists(caminho_retornos):
         try:
             df_retornos = pd.read_csv(caminho_retornos, index_col=0, parse_dates=True)
-            
-            # Estatísticas descritivas
-            st.markdown("### 📊 Estatísticas Descritivas")
-            
             colunas_analise = ['Retorno_SP500', 'Retorno_BigTech_Index', 'VIX', 'Taxa_Juros_10Y']
-            stats = df_retornos[colunas_analise].describe()
             
-            # Formatar para exibição
-            stats_formatado = stats.copy()
-            stats_formatado = stats_formatado.round(6)
+            # Criar abas
+            tab1, tab2, tab3, tab4, tab5 = st.tabs([
+                "📊 Estatísticas Descritivas", 
+                "🔗 Correlações", 
+                "📉 Volatilidade",
+                "📦 Outliers",
+                "💾 Download"
+            ])
             
-            st.dataframe(stats_formatado, use_container_width=True)
+            # ABA 1: Estatísticas Descritivas
+            with tab1:
+                st.markdown("### 📊 Estatísticas Descritivas Completas")
+                
+                stats = df_retornos[colunas_analise].describe()
+                stats_formatado = stats.copy().round(6)
+                
+                st.dataframe(stats_formatado, use_container_width=True)
+                
+                st.markdown("---")
+                
+                # Métricas principais
+                col1, col2, col3, col4 = st.columns(4)
+                
+                with col1:
+                    st.metric(
+                        "Média S&P 500",
+                        f"{df_retornos['Retorno_SP500'].mean():.6f}"
+                    )
+                    st.metric(
+                        "Média Big Tech",
+                        f"{df_retornos['Retorno_BigTech_Index'].mean():.6f}"
+                    )
+                
+                with col2:
+                    st.metric(
+                        "Mediana S&P 500",
+                        f"{df_retornos['Retorno_SP500'].median():.6f}"
+                    )
+                    st.metric(
+                        "Mediana Big Tech",
+                        f"{df_retornos['Retorno_BigTech_Index'].median():.6f}"
+                    )
+                
+                with col3:
+                    st.metric(
+                        "Desvio Padrão S&P 500",
+                        f"{df_retornos['Retorno_SP500'].std():.6f}"
+                    )
+                    st.metric(
+                        "Desvio Padrão Big Tech",
+                        f"{df_retornos['Retorno_BigTech_Index'].std():.6f}"
+                    )
+                
+                with col4:
+                    st.metric(
+                        "VIX Médio",
+                        f"{df_retornos['VIX'].mean():.2f}"
+                    )
+                    st.metric(
+                        "Taxa Juros Média",
+                        f"{df_retornos['Taxa_Juros_10Y'].mean():.2f}%"
+                    )
+                
+                st.info("""
+                💡 **Interpretação:** As estatísticas descritivas fornecem uma visão geral da 
+                distribuição dos dados, incluindo medidas de tendência central (média, mediana) 
+                e dispersão (desvio padrão, quartis).
+                """)
             
-            # Análise de correlação
-            st.markdown("---")
-            st.markdown("### 🔗 Matriz de Correlação")
-            
-            corr_matrix = df_retornos[colunas_analise].corr()
-            
-            fig_corr = px.imshow(
-                corr_matrix,
-                text_auto='.3f',
-                color_continuous_scale='RdBu_r',
-                aspect='auto',
-                title='Matriz de Correlação entre Variáveis'
-            )
-            fig_corr.update_layout(height=500)
-            st.plotly_chart(fig_corr, use_container_width=True)
-            
-            # Interpretações
-            st.markdown("---")
-            st.markdown("### 💡 Principais Achados")
-            
-            col1, col2 = st.columns(2)
-            
-            with col1:
-                st.markdown("""
-                <div class="highlight-box">
-                <h4>🎯 Correlação S&P 500 vs Big Tech</h4>
-                <p style="font-size: 1.1rem; line-height: 1.8;">
-                A correlação entre o retorno do S&P 500 e o Big Tech Index é de 
-                <strong>{:.4f}</strong>, indicando uma relação <strong>forte e positiva</strong> 
-                entre os dois índices.
-                </p>
-                </div>
-                """.format(corr_matrix.loc['Retorno_SP500', 'Retorno_BigTech_Index']), 
-                unsafe_allow_html=True)
-            
-            with col2:
-                st.markdown("""
-                <div class="highlight-box">
-                <h4>📉 VIX e Retornos</h4>
-                <p style="font-size: 1.1rem; line-height: 1.8;">
-                O VIX apresenta correlação <strong>negativa</strong> com os retornos 
-                ({:.4f} com S&P 500), confirmando seu papel como "índice do medo".
-                </p>
-                </div>
-                """.format(corr_matrix.loc['VIX', 'Retorno_SP500']), 
-                unsafe_allow_html=True)
-            
-            # Volatilidade
-            st.markdown("---")
-            st.markdown("### 📊 Análise de Volatilidade")
-            
-            col1, col2, col3 = st.columns(3)
-            
-            vol_sp500 = df_retornos['Retorno_SP500'].std() * np.sqrt(252) * 100
-            vol_bigtech = df_retornos['Retorno_BigTech_Index'].std() * np.sqrt(252) * 100
-            
-            with col1:
-                st.metric(
-                    "Volatilidade Anual S&P 500",
-                    f"{vol_sp500:.2f}%"
+            # ABA 2: Correlações
+            with tab2:
+                st.markdown("### 🔗 Análise de Correlação")
+                
+                corr_matrix = df_retornos[colunas_analise].corr()
+                
+                # Heatmap interativo
+                fig_corr = px.imshow(
+                    corr_matrix,
+                    text_auto='.3f',
+                    color_continuous_scale='RdBu_r',
+                    aspect='auto',
+                    title='Matriz de Correlação de Pearson'
                 )
+                fig_corr.update_layout(height=500)
+                st.plotly_chart(fig_corr, use_container_width=True)
+                
+                st.markdown("---")
+                
+                # Interpretações em cards
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown("""
+                    <div class="highlight-box">
+                    <h4>🎯 Correlação S&P 500 vs Big Tech</h4>
+                    <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Correlação: <strong>{:.4f}</strong>
+                    </p>
+                    <p style="font-size: 1rem; line-height: 1.6;">
+                    Indica relação <strong>forte e positiva</strong>. Quando o Big Tech sobe, 
+                    o S&P 500 tende a subir também.
+                    </p>
+                    </div>
+                    """.format(corr_matrix.loc['Retorno_SP500', 'Retorno_BigTech_Index']), 
+                    unsafe_allow_html=True)
+                
+                with col2:
+                    st.markdown("""
+                    <div class="highlight-box">
+                    <h4>📉 VIX vs Retornos</h4>
+                    <p style="font-size: 1.1rem; line-height: 1.8;">
+                    Correlação com S&P 500: <strong>{:.4f}</strong>
+                    </p>
+                    <p style="font-size: 1rem; line-height: 1.6;">
+                    Correlação <strong>negativa</strong> confirma o VIX como "índice do medo". 
+                    Quando mercados caem, o VIX sobe.
+                    </p>
+                    </div>
+                    """.format(corr_matrix.loc['VIX', 'Retorno_SP500']), 
+                    unsafe_allow_html=True)
+                
+                # Heatmap HTML completo
+                st.markdown("---")
+                caminho_heatmap = os.path.join(os.path.dirname(__file__), 'heatmap_correlacao.html')
+                html_heatmap = carregar_html(caminho_heatmap)
+                if html_heatmap:
+                    st.markdown("#### 🎨 Heatmap Interativo Completo")
+                    st.components.v1.html(html_heatmap, height=750, scrolling=True)
             
-            with col2:
-                st.metric(
-                    "Volatilidade Anual Big Tech",
-                    f"{vol_bigtech:.2f}%"
-                )
-            
-            with col3:
+            # ABA 3: Volatilidade
+            with tab3:
+                st.markdown("### 📊 Análise de Volatilidade")
+                
+                vol_sp500 = df_retornos['Retorno_SP500'].std() * np.sqrt(252) * 100
+                vol_bigtech = df_retornos['Retorno_BigTech_Index'].std() * np.sqrt(252) * 100
                 diferenca_vol = vol_bigtech - vol_sp500
-                st.metric(
-                    "Diferença de Volatilidade",
-                    f"{diferenca_vol:.2f}%",
-                    delta=f"{diferenca_vol:.2f}%"
-                )
-            
-            st.info("""
-            💡 **Observação:** O Big Tech Index apresenta maior volatilidade que o S&P 500, 
-            refletindo o risco concentrado no setor de tecnologia.
-            """)
-            
-            # Visualizações adicionais
-            st.markdown("---")
-            st.markdown("### 📊 Visualizações Adicionais")
-            
-            # Carregar boxplots
-            caminho_boxplots = os.path.join(os.path.dirname(__file__), 'boxplots_outliers.html')
-            html_boxplots = carregar_html(caminho_boxplots)
-            if html_boxplots:
-                st.markdown("#### 📦 Boxplots - Identificação de Outliers")
-                st.components.v1.html(html_boxplots, height=850, scrolling=True)
-            
-            # Carregar heatmap
-            caminho_heatmap = os.path.join(os.path.dirname(__file__), 'heatmap_correlacao.html')
-            html_heatmap = carregar_html(caminho_heatmap)
-            if html_heatmap:
-                st.markdown("#### 🎨 Heatmap - Matriz de Correlação")
-                st.components.v1.html(html_heatmap, height=750, scrolling=True)
-            
-            # Download de dados
-            st.markdown("---")
-            st.markdown("### 💾 Download dos Dados")
-            
-            col1, col2, col3 = st.columns(3)
-            
-            with col1:
-                csv_retornos = converter_df_para_csv(df_retornos)
-                st.download_button(
-                    label="📥 Baixar Retornos (CSV)",
-                    data=csv_retornos,
-                    file_name="dados_retornos.csv",
-                    mime="text/csv"
-                )
-            
-            with col2:
-                # Carregar dados sem outliers
-                caminho_sem_outliers = os.path.join(os.path.dirname(__file__), 'dados_final_sem_outliers.csv')
-                if os.path.exists(caminho_sem_outliers):
-                    df_sem_outliers = carregar_dados_csv(caminho_sem_outliers)
-                    csv_sem_outliers = converter_df_para_csv(df_sem_outliers)
-                    st.download_button(
-                        label="📥 Baixar Dados Sem Outliers (CSV)",
-                        data=csv_sem_outliers,
-                        file_name="dados_sem_outliers.csv",
-                        mime="text/csv"
+                
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.metric(
+                        "Volatilidade Anual S&P 500",
+                        f"{vol_sp500:.2f}%",
+                        help="Desvio padrão anualizado (x√252)"
                     )
-            
-            with col3:
-                # Carregar matriz de correlação
-                caminho_corr = os.path.join(os.path.dirname(__file__), 'matriz_correlacao.csv')
-                if os.path.exists(caminho_corr):
-                    df_corr = carregar_dados_csv(caminho_corr)
-                    csv_corr = converter_df_para_csv(df_corr)
-                    st.download_button(
-                        label="📥 Baixar Correlação (CSV)",
-                        data=csv_corr,
-                        file_name="matriz_correlacao.csv",
-                        mime="text/csv"
+                
+                with col2:
+                    st.metric(
+                        "Volatilidade Anual Big Tech",
+                        f"{vol_bigtech:.2f}%",
+                        help="Desvio padrão anualizado (x√252)"
                     )
+                
+                with col3:
+                    st.metric(
+                        "Diferença",
+                        f"{diferenca_vol:.2f}%",
+                        delta=f"{diferenca_vol:.2f}%",
+                        help="Big Tech vs S&P 500"
+                    )
+                
+                st.markdown("---")
+                
+                st.markdown("""
+                <div class="highlight-box">
+                <h4>💡 Interpretação da Volatilidade</h4>
+                <p style="font-size: 1.05rem; line-height: 1.8;">
+                O <strong>Big Tech Index apresenta volatilidade {:.2f}% superior</strong> ao S&P 500, 
+                refletindo o <strong>risco concentrado no setor de tecnologia</strong>. 
+                </p>
+                <p style="font-size: 1.05rem; line-height: 1.8;">
+                Volatilidade mais alta significa maior oscilação de preços, o que pode representar 
+                tanto <strong>maiores oportunidades</strong> quanto <strong>maiores riscos</strong> 
+                para investidores.
+                </p>
+                </div>
+                """.format(diferenca_vol), unsafe_allow_html=True)
+                
+                # Gráfico de volatilidade ao longo do tempo
+                st.markdown("---")
+                st.markdown("#### 📈 Evolução da Volatilidade (Rolling 30 dias)")
+                
+                rolling_vol_sp500 = df_retornos['Retorno_SP500'].rolling(30).std() * np.sqrt(252) * 100
+                rolling_vol_bigtech = df_retornos['Retorno_BigTech_Index'].rolling(30).std() * np.sqrt(252) * 100
+                
+                fig_vol = go.Figure()
+                fig_vol.add_trace(go.Scatter(
+                    x=df_retornos.index, 
+                    y=rolling_vol_sp500,
+                    name='S&P 500',
+                    line=dict(color='blue', width=2)
+                ))
+                fig_vol.add_trace(go.Scatter(
+                    x=df_retornos.index, 
+                    y=rolling_vol_bigtech,
+                    name='Big Tech Index',
+                    line=dict(color='red', width=2)
+                ))
+                fig_vol.update_layout(
+                    title='Volatilidade Anualizada (Janela Móvel 30 dias)',
+                    xaxis_title='Data',
+                    yaxis_title='Volatilidade Anualizada (%)',
+                    height=500,
+                    hovermode='x unified'
+                )
+                st.plotly_chart(fig_vol, use_container_width=True)
+            
+            # ABA 4: Outliers
+            with tab4:
+                st.markdown("### 📦 Identificação de Outliers")
+                
+                st.markdown("""
+                <div class="section-card">
+                <p style="font-size: 1.05rem; line-height: 1.8;">
+                Outliers são valores atípicos que se distanciam significativamente da maioria 
+                dos dados. Utilizamos o <strong>método IQR (Interquartile Range)</strong> para 
+                identificá-los.
+                </p>
+                <p style="font-size: 1.05rem; line-height: 1.8;">
+                <strong>Critério:</strong> Valores abaixo de Q1 - 1.5×IQR ou acima de Q3 + 1.5×IQR 
+                são considerados outliers.
+                </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                # Boxplots interativos
+                caminho_boxplots = os.path.join(os.path.dirname(__file__), 'boxplots_outliers.html')
+                html_boxplots = carregar_html(caminho_boxplots)
+                if html_boxplots:
+                    st.components.v1.html(html_boxplots, height=850, scrolling=True)
+                
+                st.markdown("---")
+                
+                # Estatísticas de outliers
+                caminho_stats = os.path.join(os.path.dirname(__file__), 'estatisticas_descritivas.csv')
+                if os.path.exists(caminho_stats):
+                    df_stats = carregar_dados_csv(caminho_stats)
+                    
+                    st.markdown("#### 📊 Resumo de Outliers por Variável")
+                    
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        st.info("""
+                        **retorno_sp500:**  
+                        - 28 outliers (3.73%)
+                        - Representam dias de alta volatilidade
+                        """)
+                        
+                        st.info("""
+                        **retorno_bigtech:**  
+                        - 31 outliers (4.13%)
+                        - Maior concentração devido à volatilidade tech
+                        """)
+                    
+                    with col2:
+                        st.info("""
+                        **vix:**  
+                        - 2 outliers (0.27%)
+                        - Picos extremos de pânico no mercado
+                        """)
+                        
+                        st.info("""
+                        **taxa_juros_10y:**  
+                        - 49 outliers (6.52%)
+                        - Períodos de mudança abrupta na política monetária
+                        """)
+            
+            # ABA 5: Download
+            with tab5:
+                st.markdown("### 💾 Download dos Dados e Resultados")
+                
+                st.markdown("""
+                <div class="section-card">
+                <p style="font-size: 1.05rem; line-height: 1.8;">
+                Baixe todos os datasets processados e resultados das análises em formato CSV 
+                para uso em outras ferramentas ou análises adicionais.
+                </p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                col1, col2, col3 = st.columns(3)
+                
+                with col1:
+                    st.markdown("#### 📊 Dados Brutos")
+                    
+                    csv_retornos = converter_df_para_csv(df_retornos)
+                    st.download_button(
+                        label="📥 Retornos Completos",
+                        data=csv_retornos,
+                        file_name="dados_retornos.csv",
+                        mime="text/csv",
+                        use_container_width=True
+                    )
+                    
+                    caminho_precos = os.path.join(os.path.dirname(__file__), 'dados_precos.csv')
+                    if os.path.exists(caminho_precos):
+                        df_precos = carregar_dados_csv(caminho_precos)
+                        csv_precos = converter_df_para_csv(df_precos)
+                        st.download_button(
+                            label="📥 Preços Históricos",
+                            data=csv_precos,
+                            file_name="dados_precos.csv",
+                            mime="text/csv",
+                            use_container_width=True
+                        )
+                
+                with col2:
+                    st.markdown("#### 📈 Dados Processados")
+                    
+                    caminho_sem_outliers = os.path.join(os.path.dirname(__file__), 'dados_final_sem_outliers.csv')
+                    if os.path.exists(caminho_sem_outliers):
+                        df_sem_outliers = carregar_dados_csv(caminho_sem_outliers)
+                        csv_sem_outliers = converter_df_para_csv(df_sem_outliers)
+                        st.download_button(
+                            label="📥 Dados Sem Outliers",
+                            data=csv_sem_outliers,
+                            file_name="dados_sem_outliers.csv",
+                            mime="text/csv",
+                            use_container_width=True
+                        )
+                    
+                    caminho_final = os.path.join(os.path.dirname(__file__), 'dados_final.csv')
+                    if os.path.exists(caminho_final):
+                        df_final = carregar_dados_csv(caminho_final)
+                        csv_final = converter_df_para_csv(df_final)
+                        st.download_button(
+                            label="📥 Dataset Final",
+                            data=csv_final,
+                            file_name="dados_final.csv",
+                            mime="text/csv",
+                            use_container_width=True
+                        )
+                
+                with col3:
+                    st.markdown("#### 📊 Análises")
+                    
+                    caminho_corr = os.path.join(os.path.dirname(__file__), 'matriz_correlacao.csv')
+                    if os.path.exists(caminho_corr):
+                        df_corr = carregar_dados_csv(caminho_corr)
+                        csv_corr = converter_df_para_csv(df_corr)
+                        st.download_button(
+                            label="📥 Matriz Correlação",
+                            data=csv_corr,
+                            file_name="matriz_correlacao.csv",
+                            mime="text/csv",
+                            use_container_width=True
+                        )
+                    
+                    caminho_stats_csv = os.path.join(os.path.dirname(__file__), 'estatisticas_descritivas.csv')
+                    if os.path.exists(caminho_stats_csv):
+                        df_stats_csv = carregar_dados_csv(caminho_stats_csv)
+                        csv_stats = converter_df_para_csv(df_stats_csv)
+                        st.download_button(
+                            label="📥 Estatísticas Descritivas",
+                            data=csv_stats,
+                            file_name="estatisticas_descritivas.csv",
+                            mime="text/csv",
+                            use_container_width=True
+                        )
         
         except Exception as e:
             st.error(f"❌ Erro ao carregar ou processar dados: {str(e)}")
@@ -1375,100 +1586,248 @@ elif secao == "🔮 Regressão Linear":
         st.warning("⚠️ Análises de regressão ainda não executadas.")
         st.info("💡 Execute: `python analises_estatisticas.py` para gerar os resultados.")
 
-elif secao == "📋 Quadros":
-    st.markdown('<div class="sub-header">📊 Quadros e Tabelas</div>', unsafe_allow_html=True)
-    
-    st.markdown("### Quadro 1 - Definição e Papel das Variáveis no Modelo")
-    
-    # Criar DataFrame para Quadro 1
-    df_quadro1 = pd.DataFrame({
-        'Variável': [
-            'Retorno S&P 500',
-            'Índice VIX',
-            'Retorno Tech Index',
-            'Taxa de Juros 10Y'
-        ],
-        'Definição': [
-            'Variação percentual logarítmica diária do índice S&P 500',
-            'Valor de fechamento diário do Índice de Volatilidade CBOE',
-            'Variação percentual logarítmica diária de um índice de mercado ponderado, composto pelas ações das "Magnificent Seven"',
-            'Taxa de rendimento (yield) diária dos títulos do tesouro americano com vencimento em 10 anos'
-        ],
-        'Papel no modelo': [
-            '🎯 Dependente',
-            '🎯 Dependente',
-            '📊 Independente',
-            '🔧 Controle'
-        ]
-    })
-    
-    # Estilizar e exibir tabela
-    st.dataframe(
-        df_quadro1,
-        use_container_width=True,
-        hide_index=True
-    )
-    
-    st.markdown("---")
-    
-    st.markdown("### Quadro 2 - Exemplo da Estrutura dos Resultados da Regressão")
-    
-    # Criar DataFrame para Quadro 2
-    df_quadro2 = pd.DataFrame({
-        'Modelo': [
-            'Modelo 1: Retorno S&P 500',
-            '',
-            '',
-            '',
-            'Modelo 2: VIX',
-            '',
-            '',
-            ''
-        ],
-        'Variável': [
-            '',
-            'Intercepto (β₀)',
-            'Retorno Tech Index (β₁)',
-            'Taxa de Juros 10Y (β₂)',
-            '',
-            'Intercepto (β₀)',
-            'Retorno Tech Index (β₁)',
-            'Taxa de Juros 10Y (β₂)'
-        ],
-        'Coeficiente': ['', '—', '—', '—', '', '—', '—', '—'],
-        'Erro Padrão': ['', '—', '—', '—', '', '—', '—', '—'],
-        'Valor-p': ['', '—', '—', '—', '', '—', '—', '—'],
-        'R² Ajustado': ['—', '', '', '', '—', '', '', '']
-    })
-    
-    st.dataframe(
-        df_quadro2,
-        use_container_width=True,
-        hide_index=True
-    )
-    
-    st.info("""
-    💡 **Nota:** Esta é uma estrutura de exemplo. Os valores serão preenchidos após a execução 
-    da análise estatística dos dados coletados.
-    """)
-    
-    st.markdown("---")
+elif secao == "🤖 Assistente IA":
+    st.markdown('<div class="sub-header">🤖 Assistente IA - Explicador Estatístico</div>', unsafe_allow_html=True)
     
     st.markdown("""
-    <div class="section-card">
-    <h4>📝 Observações sobre os Quadros</h4>
-    <p style="font-size: 1rem; line-height: 1.8;">
-    <strong>Quadro 1</strong> apresenta a definição operacional de cada variável utilizada no estudo 
-    e seu papel no modelo estatístico (dependente, independente ou de controle).
-    </p>
-    <p style="font-size: 1rem; line-height: 1.8;">
-    <strong>Quadro 2</strong> ilustra a estrutura esperada dos resultados das regressões que serão 
-    estimadas. Para cada modelo, serão reportados os coeficientes estimados, os erros padrão, 
-    os valores-p (que indicam a significância estatística) e o R² ajustado (que mede a qualidade 
-    do ajuste do modelo).
+    <div class="highlight-box">
+    <h3>👋 Olá! Sou seu Assistente de Análise Estatística</h3>
+    <p style="font-size: 1.1rem; line-height: 1.8;">
+    Estou aqui para ajudar você a entender melhor os resultados obtidos neste estudo. 
+    Posso explicar termos estatísticos, análises, interpretações e responder dúvidas de forma simples e clara!
     </p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Verificar se a API key do Gemini está configurada
+    import google.generativeai as genai
+    
+    # Tentar obter API key de secrets do Streamlit ou variável de ambiente
+    try:
+        if hasattr(st, 'secrets') and 'GEMINI_API_KEY' in st.secrets:
+            api_key = st.secrets['GEMINI_API_KEY']
+        else:
+            import os
+            api_key = os.getenv('GEMINI_API_KEY', '')
+        
+        if not api_key:
+            st.warning("""
+            ⚠️ **API Key do Google Gemini não configurada**
+            
+            Para usar o Assistente IA, você precisa configurar uma API key do Google Gemini.
+            
+            **Como configurar:**
+            1. Obtenha uma chave em: https://makersuite.google.com/app/apikey
+            2. Crie um arquivo `.streamlit/secrets.toml` na raiz do projeto
+            3. Adicione: `GEMINI_API_KEY = "sua-chave-aqui"`
+            """)
+            api_key = None
+        else:
+            genai.configure(api_key=api_key)
+    except Exception as e:
+        st.error(f"Erro ao configurar Gemini: {str(e)}")
+        api_key = None
+    
+    if api_key:
+        # Carregar dados do estudo para contexto
+        caminho_stats = os.path.join(os.path.dirname(__file__), 'estatisticas_descritivas.csv')
+        caminho_regressao = os.path.join(os.path.dirname(__file__), 'regressao_multipla.csv')
+        caminho_corr = os.path.join(os.path.dirname(__file__), 'matriz_correlacao.csv')
+        
+        contexto_estudo = """
+        CONTEXTO DO ESTUDO:
+        
+        Este estudo investiga a influência das Magnificent Seven (Apple, Microsoft, Google, Amazon, NVIDIA, Tesla, Meta) 
+        sobre o S&P 500 durante 2022-2024.
+        
+        PRINCIPAIS RESULTADOS:
+        - Correlação S&P 500 vs Big Tech: 0.8691 (muito forte)
+        - Modelo 1 (Retorno S&P 500): R² = 75.54%, β₁ = 0.4892*** (p < 0.001)
+        - Modelo 2 (VIX): R² = 37.66%, β₁ = -46.18*** (p < 0.001)
+        - Volatilidade Big Tech é superior ao S&P 500
+        - 88 outliers identificados (11.72% dos dados)
+        
+        VARIÁVEIS:
+        - retorno_sp500: Retorno logarítmico diário do S&P 500
+        - retorno_bigtech: Retorno do índice ponderado das Magnificent Seven
+        - vix: Índice de volatilidade (CBOE VIX)
+        - taxa_juros_10y: Taxa de juros dos títulos do tesouro 10 anos
+        """
+        
+        # Inicializar histórico de chat
+        if 'chat_history' not in st.session_state:
+            st.session_state.chat_history = []
+        
+        # Interface de chat
+        st.markdown("---")
+        st.markdown("### 💬 Chat com o Assistente")
+        
+        # Sugestões de perguntas
+        st.markdown("#### 💡 Perguntas Sugeridas:")
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            if st.button("O que é correlação?", use_container_width=True):
+                st.session_state.pergunta_sugerida = "O que é correlação e como interpretar o valor de 0.8691?"
+            if st.button("O que significa R²?", use_container_width=True):
+                st.session_state.pergunta_sugerida = "O que significa R² de 75.54% no modelo de regressão?"
+            if st.button("O que é p-value?", use_container_width=True):
+                st.session_state.pergunta_sugerida = "O que é p-value e por que p < 0.001 é significativo?"
+        
+        with col2:
+            if st.button("O que são outliers?", use_container_width=True):
+                st.session_state.pergunta_sugerida = "O que são outliers e por que identificá-los?"
+            if st.button("Como interpretar β₁?", use_container_width=True):
+                st.session_state.pergunta_sugerida = "Como interpretar o coeficiente β₁ = 0.4892 do modelo?"
+            if st.button("O que é volatilidade?", use_container_width=True):
+                st.session_state.pergunta_sugerida = "O que é volatilidade financeira e como é calculada?"
+        
+        st.markdown("---")
+        
+        # Campo de entrada
+        pergunta_usuario = st.text_input(
+            "Sua pergunta:",
+            value=st.session_state.get('pergunta_sugerida', ''),
+            placeholder="Digite sua dúvida sobre as análises, termos estatísticos, interpretações..."
+        )
+        
+        if 'pergunta_sugerida' in st.session_state:
+            del st.session_state.pergunta_sugerida
+        
+        if st.button("Enviar Pergunta", type="primary", use_container_width=True):
+            if pergunta_usuario:
+                with st.spinner("🤔 Pensando..."):
+                    try:
+                        # Configurar modelo
+                        model = genai.GenerativeModel('gemini-pro')
+                        
+                        # Prompt com contexto
+                        prompt = f"""
+                        Você é um assistente especializado em estatística e análise de dados financeiros. 
+                        Seu papel é explicar conceitos de forma simples, clara e didática, como se estivesse 
+                        ensinando para alguém sem formação técnica em estatística.
+                        
+                        {contexto_estudo}
+                        
+                        INSTRUÇÕES:
+                        - Explique de forma simples e objetiva
+                        - Use exemplos práticos e analogias quando possível
+                        - Evite jargões excessivos, mas defina termos técnicos
+                        - Relacione a resposta com o contexto do estudo quando relevante
+                        - Seja educado e encorajador
+                        - Limite respostas a 200-300 palavras
+                        
+                        PERGUNTA DO USUÁRIO:
+                        {pergunta_usuario}
+                        
+                        RESPOSTA:
+                        """
+                        
+                        response = model.generate_content(prompt)
+                        resposta = response.text
+                        
+                        # Adicionar ao histórico
+                        st.session_state.chat_history.append({
+                            'pergunta': pergunta_usuario,
+                            'resposta': resposta
+                        })
+                        
+                        # Exibir resposta
+                        st.markdown("""
+                        <div class="highlight-box">
+                        <h4>🤖 Resposta do Assistente:</h4>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        st.markdown(resposta)
+                        
+                    except Exception as e:
+                        st.error(f"❌ Erro ao gerar resposta: {str(e)}")
+                        st.info("Tente reformular sua pergunta ou verifique a configuração da API key.")
+            else:
+                st.warning("Por favor, digite uma pergunta antes de enviar.")
+        
+        # Histórico de conversas
+        if st.session_state.chat_history:
+            st.markdown("---")
+            st.markdown("### 📜 Histórico de Conversas")
+            
+            for i, item in enumerate(reversed(st.session_state.chat_history[-5:]), 1):
+                with st.expander(f"💬 Conversa {len(st.session_state.chat_history) - i + 1}: {item['pergunta'][:50]}..."):
+                    st.markdown(f"**Você perguntou:** {item['pergunta']}")
+                    st.markdown("---")
+                    st.markdown(f"**Assistente respondeu:** {item['resposta']}")
+            
+            if st.button("🗑️ Limpar Histórico"):
+                st.session_state.chat_history = []
+                st.rerun()
+    
+    else:
+        st.markdown("""
+        <div class="section-card">
+        <h4>📚 Glossário de Termos Estatísticos</h4>
+        <p style="font-size: 1rem; line-height: 1.8;">
+        Enquanto isso, confira alguns termos importantes utilizados neste estudo:
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        with st.expander("📊 Correlação"):
+            st.markdown("""
+            **Correlação** mede a relação linear entre duas variáveis, variando de -1 a +1.
+            - **+1:** Correlação perfeita positiva (quando uma sobe, a outra também sobe)
+            - **0:** Sem correlação (variáveis independentes)
+            - **-1:** Correlação perfeita negativa (quando uma sobe, a outra desce)
+            
+            No estudo: Correlação de 0.8691 entre S&P 500 e Big Tech indica relação muito forte!
+            """)
+        
+        with st.expander("📈 R² (Coeficiente de Determinação)"):
+            st.markdown("""
+            **R²** indica quanto da variação da variável dependente é explicada pelo modelo.
+            - Varia de 0% a 100%
+            - Quanto maior, melhor o ajuste do modelo
+            
+            No estudo: R² = 75.54% significa que o modelo explica 75.54% da variação do S&P 500!
+            """)
+        
+        with st.expander("🎯 P-value (Valor-p)"):
+            st.markdown("""
+            **P-value** indica a probabilidade de observar os resultados por acaso.
+            - p < 0.05: Resultado estatisticamente significativo (*)
+            - p < 0.01: Altamente significativo (**)
+            - p < 0.001: Muito altamente significativo (***)
+            
+            No estudo: p < 0.001 confirma que os resultados são confiáveis e não casuais!
+            """)
+        
+        with st.expander("📦 Outliers"):
+            st.markdown("""
+            **Outliers** são valores muito diferentes da maioria dos dados.
+            - Podem indicar erros de medição ou eventos excepcionais
+            - Identificados pelo método IQR (Interquartile Range)
+            
+            No estudo: 88 outliers (11.72%) representam dias de volatilidade extrema!
+            """)
+        
+        with st.expander("📊 Volatilidade"):
+            st.markdown("""
+            **Volatilidade** mede o grau de variação dos preços ao longo do tempo.
+            - Alta volatilidade = maior risco e oportunidade
+            - Baixa volatilidade = maior estabilidade
+            - Calculada como desvio padrão anualizado
+            
+            No estudo: Big Tech tem volatilidade superior ao S&P 500 (maior risco concentrado)!
+            """)
+        
+        with st.expander("🔢 Coeficientes (β)"):
+            st.markdown("""
+            **Coeficientes** indicam o impacto de cada variável independente na dependente.
+            - β₀: Intercepto (valor quando todas variáveis = 0)
+            - β₁, β₂: Efeito de cada variável independente
+            
+            No estudo: β₁ = 0.4892 significa que 1% de aumento no Big Tech resulta em 0.49% no S&P 500!
+            """)
+
 
 elif secao == "🎯 Conclusão":
     st.markdown('<div class="sub-header">🎯 Conclusão</div>', unsafe_allow_html=True)
