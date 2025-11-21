@@ -40,10 +40,6 @@ env/
 .DS_Store
 Thumbs.db
 
-# Data files (opcional - remova se quiser versionar os CSVs)
-*.csv
-*.html
-
 # Jupyter Notebook
 .ipynb_checkpoints
 

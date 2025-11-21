@@ -1,0 +1,5 @@
+,Estatística ADF,Valor-p,Valores Críticos,Estacionária,Conclusão
+retorno_sp500,-19.91771592120946,0.0,"{'1%': np.float64(-3.439110818166223), '5%': np.float64(-2.8654065210185795), '10%': np.float64(-2.568828945705979)}",Sim,Rejeita H0 (série estacionária)
+retorno_bigtech,-28.07978117669593,0.0,"{'1%': np.float64(-3.439099096730074), '5%': np.float64(-2.8654013553540745), '10%': np.float64(-2.568826193777778)}",Sim,Rejeita H0 (série estacionária)
+vix,-3.185152842017891,0.02086033720400643,"{'1%': np.float64(-3.439134355513998), '5%': np.float64(-2.865416893922985), '10%': np.float64(-2.56883447171999)}",Sim,Rejeita H0 (série estacionária)
+taxa_juros_10y,-2.486540199421311,0.11878368109005827,"{'1%': np.float64(-3.43912257105195), '5%': np.float64(-2.8654117005229844), '10%': np.float64(-2.568831705010152)}",Não,Não rejeita H0 (série não-estacionária)

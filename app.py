@@ -108,7 +108,7 @@ secao = st.sidebar.radio(
     "Selecione a seção:",
     ["🏠 Início", "📄 Resumo", "📖 Introdução", "📚 Referencial Teórico", 
      "🔬 Metodologia", "📊 Dados Coletados", "📈 Análise Estatística", 
-     "🔮 Regressão Linear", "📋 Quadros", "📚 Referências"]
+     "🔮 Regressão Linear", "📋 Quadros", "🎯 Conclusão", "📚 Referências"]
 )
 
 st.sidebar.markdown("---")
@@ -1466,6 +1466,265 @@ elif secao == "📋 Quadros":
     estimadas. Para cada modelo, serão reportados os coeficientes estimados, os erros padrão, 
     os valores-p (que indicam a significância estatística) e o R² ajustado (que mede a qualidade 
     do ajuste do modelo).
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+elif secao == "🎯 Conclusão":
+    st.markdown('<div class="sub-header">🎯 Conclusão</div>', unsafe_allow_html=True)
+    
+    # Síntese dos principais achados
+    st.markdown("### 📊 Síntese dos Principais Achados")
+    
+    st.markdown("""
+    <div class="highlight-box">
+    <p style="font-size: 1.1rem; line-height: 1.8; text-align: justify;">
+    Este estudo investigou empiricamente a influência do desempenho e concentração do setor 
+    de tecnologia, representado pelas <strong>Magnificent Seven</strong> (Apple, Microsoft, 
+    Google, Amazon, NVIDIA, Tesla e Meta), sobre a volatilidade e o retorno do índice S&P 500 
+    durante o período de janeiro de 2022 a dezembro de 2024.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        <div class="section-card">
+        <h4>📈 Principais Resultados Quantitativos</h4>
+        <ul style="font-size: 1.05rem; line-height: 1.8;">
+            <li><strong>Correlação forte e positiva</strong> (r = 0.8691) entre os retornos do 
+            S&P 500 e do Big Tech Index</li>
+            <li><strong>75.54%</strong> da variação do retorno do S&P 500 é explicada pelo 
+            modelo de regressão (R² = 0.7554)</li>
+            <li>Coeficiente β₁ = <strong>0.4892***</strong> indica que cada 1% de aumento no 
+            retorno do Big Tech Index resulta, em média, em 0.49% de aumento no S&P 500</li>
+            <li>Big Tech Index apresenta <strong>volatilidade superior</strong> ao S&P 500, 
+            refletindo risco concentrado</li>
+            <li>VIX é <strong>negativamente influenciado</strong> pelos retornos das big techs 
+            (β₁ = -46.18***), sugerindo que bom desempenho tecnológico reduz percepção de risco</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="section-card">
+        <h4>💡 Principais Insights Qualitativos</h4>
+        <ul style="font-size: 1.05rem; line-height: 1.8;">
+            <li><strong>Concentração setorial elevada:</strong> O setor de tecnologia exerce 
+            influência desproporcional sobre o índice geral</li>
+            <li><strong>Risco sistêmico:</strong> A dependência do S&P 500 em relação às 
+            big techs representa potencial vulnerabilidade</li>
+            <li><strong>Diversificação limitada:</strong> Investidores em fundos indexados 
+            estão indiretamente expostos à concentração tecnológica</li>
+            <li><strong>Efeito estabilizador:</strong> Paradoxalmente, o bom desempenho das 
+            big techs está associado a menor volatilidade de mercado</li>
+            <li><strong>Fatores macroeconômicos:</strong> Taxa de juros demonstrou influência 
+            significativa sobre a volatilidade (β₂ = -4.57***)</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Resposta à questão de pesquisa
+    st.markdown("---")
+    st.markdown("### ❓ Resposta à Questão de Pesquisa")
+    
+    st.markdown("""
+    <div class="highlight-box">
+    <h4>❓ Questão Central:</h4>
+    <p style="font-size: 1.15rem; font-style: italic; text-align: center; margin: 1rem 0;">
+    "Qual a influência do desempenho e da concentração das Magnificent Seven sobre 
+    a volatilidade e o retorno do S&P 500?"
+    </p>
+    
+    <h4>✅ Resposta:</h4>
+    <p style="font-size: 1.1rem; line-height: 1.9; text-align: justify;">
+    Os resultados confirmam que as <strong>Magnificent Seven exercem influência substancial 
+    e estatisticamente significativa</strong> tanto sobre o retorno quanto sobre a volatilidade 
+    do S&P 500. A forte correlação positiva (0.8691) e o alto poder explicativo do modelo 
+    (R² = 75.54%) demonstram que o desempenho dessas empresas é um <strong>fator determinante</strong> 
+    para a trajetória do índice de mercado.
+    </p>
+    
+    <p style="font-size: 1.1rem; line-height: 1.9; text-align: justify;">
+    Quanto à volatilidade, verificou-se uma <strong>relação inversa significativa</strong> entre 
+    os retornos do Big Tech Index e o VIX, indicando que o bom desempenho tecnológico está 
+    associado a <strong>menor percepção de risco</strong> no mercado. Esta evidência sugere que, 
+    apesar da concentração representar risco sistêmico potencial, no período analisado as big techs 
+    atuaram como <strong>âncoras de estabilidade</strong> do mercado.
+    </p>
+    
+    <p style="font-size: 1.1rem; line-height: 1.9; text-align: justify;">
+    Portanto, a <strong>hipótese central da pesquisa foi confirmada</strong>: existe uma relação 
+    significativa e mensurável entre o desempenho das Magnificent Seven e os indicadores de 
+    retorno e volatilidade do mercado amplo.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Contribuições do estudo
+    st.markdown("---")
+    st.markdown("### 🎓 Contribuições do Estudo")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.markdown("""
+        <div class="section-card">
+        <h4>📚 Contribuições Acadêmicas</h4>
+        <ul style="font-size: 1.05rem; line-height: 1.8;">
+            <li><strong>Quantificação empírica:</strong> Fornece medidas precisas da influência 
+            do setor tecnológico sobre o mercado no período recente</li>
+            <li><strong>Metodologia replicável:</strong> Apresenta abordagem analítica que pode 
+            ser aplicada a outros setores e períodos</li>
+            <li><strong>Atualização temporal:</strong> Analisa dados recentes (2022-2024), 
+            incorporando contexto pós-pandemia e alta de juros</li>
+            <li><strong>Análise multidimensional:</strong> Examina simultaneamente retorno, 
+            volatilidade e fatores macroeconômicos</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="section-card">
+        <h4>💼 Contribuições Práticas</h4>
+        <ul style="font-size: 1.05rem; line-height: 1.8;">
+            <li><strong>Gestão de portfólio:</strong> Evidencia necessidade de atenção à 
+            concentração tecnológica em estratégias passivas</li>
+            <li><strong>Avaliação de risco:</strong> Alerta sobre exposição indireta ao 
+            setor tecnológico via fundos indexados</li>
+            <li><strong>Tomada de decisão:</strong> Oferece insights quantitativos para 
+            alocação de ativos e diversificação</li>
+            <li><strong>Monitoramento de mercado:</strong> Identifica setor-chave para 
+            acompanhamento de tendências do mercado amplo</li>
+        </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Limitações do estudo
+    st.markdown("---")
+    st.markdown("### ⚠️ Limitações do Estudo")
+    
+    st.markdown("""
+    <div class="section-card">
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>1. Período amostral:</strong> A análise cobre 3 anos (2022-2024), período caracterizado 
+    por alta volatilidade, aperto monetário e recuperação pós-pandemia, o que pode limitar a 
+    generalização dos resultados para outros contextos econômicos.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>2. Simplificação da capitalização:</strong> O Big Tech Index utiliza preços como 
+    proxy para capitalização de mercado, em vez de dados precisos de shares outstanding, 
+    introduzindo possível viés na ponderação.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>3. Causalidade:</strong> Embora haja forte correlação, os modelos de regressão não 
+    estabelecem causalidade definitiva, apenas associação estatística.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>4. Variáveis omitidas:</strong> Outros fatores relevantes (política monetária, 
+    eventos geopolíticos, mudanças regulatórias) não foram explicitamente modelados.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>5. Estabilidade temporal:</strong> Os coeficientes estimados podem não ser constantes 
+    ao longo do tempo, especialmente em contextos de mudança estrutural do mercado.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Sugestões para pesquisas futuras
+    st.markdown("---")
+    st.markdown("### 🔬 Sugestões para Pesquisas Futuras")
+    
+    st.markdown("""
+    <div class="highlight-box">
+    <h4>🚀 Oportunidades de Aprofundamento</h4>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>1. Análise de janelas temporais:</strong> Investigar a evolução da influência das 
+    big techs ao longo de diferentes ciclos econômicos (expansão vs. recessão, alta vs. baixa 
+    de juros) utilizando modelos de janelas móveis ou rolling regressions.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>2. Comparação internacional:</strong> Replicar a análise para outros mercados 
+    desenvolvidos (Europa, Ásia) e emergentes, investigando se a concentração tecnológica é 
+    fenômeno global ou específico do mercado americano.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>3. Análise de quebras estruturais:</strong> Aplicar testes de Chow ou análise de 
+    mudança de regime (Markov-switching) para identificar pontos de inflexão na relação entre 
+    big techs e mercado.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>4. Modelagem de contágio:</strong> Empregar modelos de contágio financeiro (DCC-GARCH, 
+    Copulas) para avaliar transmissão de choques do setor tecnológico para outros setores.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>5. Análise setorial desagregada:</strong> Investigar diferenças de influência entre 
+    as empresas individuais das Magnificent Seven e identificar quais exercem maior impacto.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>6. Incorporação de fatores alternativos:</strong> Incluir variáveis como sentiment 
+    de redes sociais, notícias financeiras (NLP), fluxos de capital e indicadores de liquidez 
+    nos modelos preditivos.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>7. Implicações para regulação:</strong> Estudos qualitativos e quantitativos sobre 
+    políticas regulatórias antitruste e seus potenciais impactos na concentração e estabilidade 
+    do mercado.
+    </p>
+    
+    <p style="font-size: 1.05rem; line-height: 1.8; text-align: justify;">
+    <strong>8. Machine Learning:</strong> Aplicar técnicas de aprendizado de máquina (Random Forest, 
+    XGBoost, Redes Neurais) para previsão de retornos e volatilidade, incorporando o fator big tech.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Considerações finais
+    st.markdown("---")
+    st.markdown("### 📝 Considerações Finais")
+    
+    st.markdown("""
+    <div class="highlight-box">
+    <p style="font-size: 1.1rem; line-height: 1.9; text-align: justify;">
+    Este trabalho demonstrou, por meio de análises estatísticas rigorosas e modelos econométricos, 
+    que as <strong>Magnificent Seven não são apenas protagonistas do setor tecnológico</strong>, 
+    mas sim <strong>pilares fundamentais da dinâmica do mercado de capitais americano</strong> 
+    no período recente.
+    </p>
+    
+    <p style="font-size: 1.1rem; line-height: 1.9; text-align: justify;">
+    A concentração observada representa um <strong>fenômeno dual</strong>: enquanto proporciona 
+    retornos robustos e aparente estabilização do mercado, também cria vulnerabilidade sistêmica 
+    e desafios para diversificação tradicional. Investidores, gestores de risco e reguladores 
+    devem estar atentos a esta <strong>nova configuração do mercado</strong>, onde poucas empresas 
+    exercem influência desproporcional sobre índices amplamente utilizados como referência e 
+    benchmark.
+    </p>
+    
+    <p style="font-size: 1.1rem; line-height: 1.9; text-align: justify;">
+    Os resultados reforçam a importância de <strong>monitoramento contínuo</strong> do setor 
+    tecnológico e de abordagens sofisticadas de gestão de portfólio que considerem explicitamente 
+    a exposição a este fator de risco/retorno emergente.
+    </p>
+    
+    <p style="font-size: 1.15rem; font-weight: bold; text-align: center; margin-top: 2rem;">
+    🎯 "A era da dominância tecnológica no mercado de capitais não é mais hipótese – é realidade 
+    empiricamente verificada que demanda resposta estratégica."
     </p>
     </div>
     """, unsafe_allow_html=True)
