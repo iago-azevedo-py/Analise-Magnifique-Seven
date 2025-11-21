@@ -1601,6 +1601,7 @@ elif secao == "🤖 Assistente IA":
     
     # Verificar se a API key do Gemini está configurada
     import google.generativeai as genai
+    import time
     
     # Tentar obter API key de secrets do Streamlit ou variável de ambiente
     api_key = None
@@ -1639,10 +1640,10 @@ elif secao == "🤖 Assistente IA":
             with st.expander("📖 **Como configurar em 3 passos simples**", expanded=True):
                 st.markdown("""
                 ### 1️⃣ Obter Chave API (Grátis)
-                1. Acesse: [**Google AI Studio**](https://makersuite.google.com/app/apikey)
+                1. Acesse: [**Google AI Studio**](https://aistudio.google.com/apikey)
                 2. Faça login com sua conta Google
-                3. Clique em **"Create API Key"**
-                4. Copie a chave gerada
+                3. Clique em **"Create API Key"** ou **"Get API Key"**
+                4. Copie a chave gerada (começa com `AIza...`)
                 
                 ### 2️⃣ Configurar no Projeto
                 1. Abra o arquivo: **`.streamlit/secrets.toml`**
@@ -1659,6 +1660,13 @@ elif secao == "🤖 Assistente IA":
                 - Ou atualize a página (F5)
                 
                 ---
+                
+                ### 📊 Limites Gratuitos da API Gemini:
+                - **15 requisições por minuto (RPM)**
+                - **1 milhão de tokens por minuto**
+                - **1.500 requisições por dia**
+                
+                ⚠️ **Nota:** Se exceder o limite, aguarde 1 minuto antes de tentar novamente.
                 
                 💡 **Dica:** O arquivo `secrets.toml` já está criado e pronto para uso!  
                 🔒 **Segurança:** Sua chave não será enviada ao GitHub (está no .gitignore)
@@ -1744,8 +1752,8 @@ elif secao == "🤖 Assistente IA":
             if pergunta_usuario and pergunta_usuario.strip():
                 with st.spinner("🤔 Pensando..."):
                     try:
-                        # Configurar modelo
-                        model = genai.GenerativeModel('gemini-2.5-flash')
+                        # Configurar modelo com versão mais recente
+                        model = genai.GenerativeModel('gemini-2.0-flash-exp')
                         
                         # Prompt com contexto
                         prompt = f"""
@@ -1769,26 +1777,71 @@ elif secao == "🤖 Assistente IA":
                         RESPOSTA:
                         """
                         
-                        response = model.generate_content(prompt)
-                        resposta = response.text
+                        # Tentar com retry em caso de erro 429
+                        max_retries = 3
+                        retry_delay = 2
                         
-                        # Adicionar ao histórico
-                        st.session_state.chat_history.append({
-                            'pergunta': pergunta_usuario,
-                            'resposta': resposta
-                        })
-                        
-                        # Exibir resposta
-                        st.markdown("""
-                        <div class="highlight-box">
-                        <h4>🤖 Resposta do Assistente:</h4>
-                        </div>
-                        """, unsafe_allow_html=True)
-                        st.markdown(resposta)
+                        for attempt in range(max_retries):
+                            try:
+                                response = model.generate_content(prompt)
+                                resposta = response.text
+                                
+                                # Adicionar ao histórico
+                                st.session_state.chat_history.append({
+                                    'pergunta': pergunta_usuario,
+                                    'resposta': resposta
+                                })
+                                
+                                # Exibir resposta
+                                st.markdown("""
+                                <div class="highlight-box">
+                                <h4>🤖 Resposta do Assistente:</h4>
+                                </div>
+                                """, unsafe_allow_html=True)
+                                st.markdown(resposta)
+                                break
+                                
+                            except Exception as retry_error:
+                                if "429" in str(retry_error) and attempt < max_retries - 1:
+                                    st.warning(f"⏳ Limite de requisições atingido. Aguardando {retry_delay} segundos... (Tentativa {attempt + 1}/{max_retries})")
+                                    time.sleep(retry_delay)
+                                    retry_delay *= 2  # Exponential backoff
+                                else:
+                                    raise retry_error
                         
                     except Exception as e:
-                        st.error(f"❌ Erro ao gerar resposta: {str(e)}")
-                        st.info("Tente reformular sua pergunta ou verifique a configuração da API key.")
+                        error_msg = str(e)
+                        
+                        if "429" in error_msg:
+                            st.error("""
+                            ❌ **Limite de requisições excedido (Erro 429)**
+                            
+                            A API Gemini tem limites gratuitos:
+                            - 15 requisições por minuto
+                            - 1.500 requisições por dia
+                            
+                            **Soluções:**
+                            1. ⏰ Aguarde 1-2 minutos e tente novamente
+                            2. 📊 Reduza a frequência de perguntas
+                            3. 💳 Considere upgrade do plano (se necessário uso intensivo)
+                            4. 📚 Use o Glossário de Termos abaixo enquanto isso
+                            
+                            🔗 [Ver limites e uso atual](https://ai.google.dev/gemini-api/docs/rate-limits)
+                            """)
+                        elif "quota" in error_msg.lower():
+                            st.error("""
+                            ❌ **Quota excedida**
+                            
+                            Sua cota diária ou mensal da API foi excedida.
+                            
+                            **Soluções:**
+                            1. 📅 Aguarde até amanhã para resetar a cota diária
+                            2. 📊 Verifique seu uso em: https://ai.dev/usage
+                            3. 💳 Considere upgrade do plano se necessário
+                            """)
+                        else:
+                            st.error(f"❌ Erro ao gerar resposta: {error_msg}")
+                            st.info("Tente reformular sua pergunta ou use o Glossário abaixo.")
             else:
                 st.warning("Por favor, digite uma pergunta antes de enviar.")
         
@@ -1807,15 +1860,16 @@ elif secao == "🤖 Assistente IA":
                 st.session_state.chat_history = []
                 st.rerun()
     
-    else:
-        st.markdown("""
-        <div class="section-card">
-        <h4>📚 Glossário de Termos Estatísticos</h4>
-        <p style="font-size: 1rem; line-height: 1.8;">
-        Enquanto isso, confira alguns termos importantes utilizados neste estudo:
-        </p>
-        </div>
-        """, unsafe_allow_html=True)
+    # Glossário sempre disponível (movido para fora do else)
+    st.markdown("---")
+    st.markdown("""
+    <div class="section-card">
+    <h4>📚 Glossário de Termos Estatísticos</h4>
+    <p style="font-size: 1rem; line-height: 1.8;">
+    Confira alguns termos importantes utilizados neste estudo:
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
         
         with st.expander("📊 Correlação"):
             st.markdown("""
