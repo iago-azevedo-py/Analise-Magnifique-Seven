@@ -1732,18 +1732,20 @@ elif secao == "🤖 Assistente IA":
         pergunta_usuario = st.text_input(
             "Sua pergunta:",
             value=st.session_state.get('pergunta_sugerida', ''),
-            placeholder="Digite sua dúvida sobre as análises, termos estatísticos, interpretações..."
+            placeholder="Digite sua dúvida sobre as análises, termos estatísticos, interpretações...",
+            key="input_pergunta"
         )
         
+        # Limpar sugestão após usar (mas preservar o valor no input)
         if 'pergunta_sugerida' in st.session_state:
             del st.session_state.pergunta_sugerida
         
         if st.button("Enviar Pergunta", type="primary", use_container_width=True):
-            if pergunta_usuario:
+            if pergunta_usuario and pergunta_usuario.strip():
                 with st.spinner("🤔 Pensando..."):
                     try:
                         # Configurar modelo
-                        model = genai.GenerativeModel('gemini-pro')
+                        model = genai.GenerativeModel('gemini-2.5-flash')
                         
                         # Prompt com contexto
                         prompt = f"""
