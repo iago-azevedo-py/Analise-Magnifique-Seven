@@ -1753,7 +1753,7 @@ elif secao == "🤖 Assistente IA":
                 with st.spinner("🤔 Pensando..."):
                     try:
                         # Configurar modelo com versão mais recente
-                        model = genai.GenerativeModel('gemini-2.0-flash-exp')
+                        model = genai.GenerativeModel('gemini-2.5-flash')
                         
                         # Prompt com contexto
                         prompt = f"""
@@ -1870,65 +1870,63 @@ elif secao == "🤖 Assistente IA":
     </p>
     </div>
     """, unsafe_allow_html=True)
+    
+    with st.expander("📊 Correlação"):
+        st.markdown("""
+        **Correlação** mede a relação linear entre duas variáveis, variando de -1 a +1.
+        - **+1:** Correlação perfeita positiva (quando uma sobe, a outra também sobe)
+        - **0:** Sem correlação (variáveis independentes)
+        - **-1:** Correlação perfeita negativa (quando uma sobe, a outra desce)
         
-        with st.expander("📊 Correlação"):
-            st.markdown("""
-            **Correlação** mede a relação linear entre duas variáveis, variando de -1 a +1.
-            - **+1:** Correlação perfeita positiva (quando uma sobe, a outra também sobe)
-            - **0:** Sem correlação (variáveis independentes)
-            - **-1:** Correlação perfeita negativa (quando uma sobe, a outra desce)
-            
-            No estudo: Correlação de 0.8691 entre S&P 500 e Big Tech indica relação muito forte!
-            """)
+        No estudo: Correlação de 0.8691 entre S&P 500 e Big Tech indica relação muito forte!
+        """)
+    
+    with st.expander("📈 R² (Coeficiente de Determinação)"):
+        st.markdown("""
+        **R²** indica quanto da variação da variável dependente é explicada pelo modelo.
+        - Varia de 0% a 100%
+        - Quanto maior, melhor o ajuste do modelo
         
-        with st.expander("📈 R² (Coeficiente de Determinação)"):
-            st.markdown("""
-            **R²** indica quanto da variação da variável dependente é explicada pelo modelo.
-            - Varia de 0% a 100%
-            - Quanto maior, melhor o ajuste do modelo
-            
-            No estudo: R² = 75.54% significa que o modelo explica 75.54% da variação do S&P 500!
-            """)
+        No estudo: R² = 75.54% significa que o modelo explica 75.54% da variação do S&P 500!
+        """)
+    
+    with st.expander("🎯 P-value (Valor-p)"):
+        st.markdown("""
+        **P-value** indica a probabilidade de observar os resultados por acaso.
+        - p < 0.05: Resultado estatisticamente significativo (*)
+        - p < 0.01: Altamente significativo (**)
+        - p < 0.001: Muito altamente significativo (***)
         
-        with st.expander("🎯 P-value (Valor-p)"):
-            st.markdown("""
-            **P-value** indica a probabilidade de observar os resultados por acaso.
-            - p < 0.05: Resultado estatisticamente significativo (*)
-            - p < 0.01: Altamente significativo (**)
-            - p < 0.001: Muito altamente significativo (***)
-            
-            No estudo: p < 0.001 confirma que os resultados são confiáveis e não casuais!
-            """)
+        No estudo: p < 0.001 confirma que os resultados são confiáveis e não casuais!
+        """)
+    
+    with st.expander("📦 Outliers"):
+        st.markdown("""
+        **Outliers** são valores muito diferentes da maioria dos dados.
+        - Podem indicar erros de medição ou eventos excepcionais
+        - Identificados pelo método IQR (Interquartile Range)
         
-        with st.expander("📦 Outliers"):
-            st.markdown("""
-            **Outliers** são valores muito diferentes da maioria dos dados.
-            - Podem indicar erros de medição ou eventos excepcionais
-            - Identificados pelo método IQR (Interquartile Range)
-            
-            No estudo: 88 outliers (11.72%) representam dias de volatilidade extrema!
-            """)
+        No estudo: 88 outliers (11.72%) representam dias de volatilidade extrema!
+        """)
+    
+    with st.expander("📊 Volatilidade"):
+        st.markdown("""
+        **Volatilidade** mede o grau de variação dos preços ao longo do tempo.
+        - Alta volatilidade = maior risco e oportunidade
+        - Baixa volatilidade = maior estabilidade
+        - Calculada como desvio padrão anualizado
         
-        with st.expander("📊 Volatilidade"):
-            st.markdown("""
-            **Volatilidade** mede o grau de variação dos preços ao longo do tempo.
-            - Alta volatilidade = maior risco e oportunidade
-            - Baixa volatilidade = maior estabilidade
-            - Calculada como desvio padrão anualizado
-            
-            No estudo: Big Tech tem volatilidade superior ao S&P 500 (maior risco concentrado)!
-            """)
+        No estudo: Big Tech tem volatilidade superior ao S&P 500 (maior risco concentrado)!
+        """)
+    
+    with st.expander("🔢 Coeficientes (β)"):
+        st.markdown("""
+        **Coeficientes** indicam o impacto de cada variável independente na dependente.
+        - β₀: Intercepto (valor quando todas variáveis = 0)
+        - β₁, β₂: Efeito de cada variável independente
         
-        with st.expander("🔢 Coeficientes (β)"):
-            st.markdown("""
-            **Coeficientes** indicam o impacto de cada variável independente na dependente.
-            - β₀: Intercepto (valor quando todas variáveis = 0)
-            - β₁, β₂: Efeito de cada variável independente
-            
-            No estudo: β₁ = 0.4892 significa que 1% de aumento no Big Tech resulta em 0.49% no S&P 500!
-            """)
-
-
+        No estudo: β₁ = 0.4892 significa que 1% de aumento no Big Tech resulta em 0.49% no S&P 500!
+        """)
 elif secao == "🎯 Conclusão":
     st.markdown('<div class="sub-header">🎯 Conclusão</div>', unsafe_allow_html=True)
     
