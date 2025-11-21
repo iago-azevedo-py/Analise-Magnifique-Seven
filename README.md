@@ -32,6 +32,22 @@ Trabalho acadêmico que analisa empiricamente a **influência do desempenho e co
 
 ---
 
+## 🤖 Assistente IA (Opcional)
+
+O dashboard inclui um **Assistente IA** alimentado pelo Google Gemini que explica análises e termos estatísticos de forma simples e interativa.
+
+### ⚡ Configuração Rápida (3 passos):
+
+1. **Obter chave API grátis:** https://makersuite.google.com/app/apikey
+2. **Editar arquivo:** `.streamlit/secrets.toml` (cole sua chave)
+3. **Recarregar:** Pressione R no terminal ou F5 no navegador
+
+📖 **Guia completo:** Veja `CONFIGURAR_IA.md`
+
+> ⚠️ Sem a API, o dashboard funciona normalmente mas mostra um glossário estático ao invés do chat interativo.
+
+---
+
 ## 🚀 Início Rápido
 
 ### Opção 1: Visualização Imediata (Recomendada) ⚡

@@ -1603,29 +1603,73 @@ elif secao == "🤖 Assistente IA":
     import google.generativeai as genai
     
     # Tentar obter API key de secrets do Streamlit ou variável de ambiente
+    api_key = None
+    api_configurada = False
+    
     try:
+        # Prioridade 1: Streamlit secrets
         if hasattr(st, 'secrets') and 'GEMINI_API_KEY' in st.secrets:
-            api_key = st.secrets['GEMINI_API_KEY']
-        else:
-            import os
-            api_key = os.getenv('GEMINI_API_KEY', '')
+            api_key = st.secrets['GEMINI_API_KEY'].strip()
+            if api_key and api_key != "COLE_SUA_CHAVE_API_AQUI":
+                genai.configure(api_key=api_key)
+                api_configurada = True
+                st.success("✅ **Assistente IA Ativado!** API Gemini configurada com sucesso.")
+            else:
+                api_key = None
         
-        if not api_key:
+        # Prioridade 2: Variável de ambiente
+        if not api_configurada:
+            import os
+            api_key = os.getenv('GEMINI_API_KEY', '').strip()
+            if api_key and api_key != "COLE_SUA_CHAVE_API_AQUI":
+                genai.configure(api_key=api_key)
+                api_configurada = True
+                st.success("✅ **Assistente IA Ativado!** API Gemini configurada via variável de ambiente.")
+            else:
+                api_key = None
+        
+        # Se não configurada, mostrar instruções
+        if not api_configurada:
             st.warning("""
             ⚠️ **API Key do Google Gemini não configurada**
             
-            Para usar o Assistente IA, você precisa configurar uma API key do Google Gemini.
-            
-            **Como configurar:**
-            1. Obtenha uma chave em: https://makersuite.google.com/app/apikey
-            2. Crie um arquivo `.streamlit/secrets.toml` na raiz do projeto
-            3. Adicione: `GEMINI_API_KEY = "sua-chave-aqui"`
+            O Assistente IA precisa de uma chave API (gratuita) do Google Gemini para funcionar.
             """)
+            
+            with st.expander("📖 **Como configurar em 3 passos simples**", expanded=True):
+                st.markdown("""
+                ### 1️⃣ Obter Chave API (Grátis)
+                1. Acesse: [**Google AI Studio**](https://makersuite.google.com/app/apikey)
+                2. Faça login com sua conta Google
+                3. Clique em **"Create API Key"**
+                4. Copie a chave gerada
+                
+                ### 2️⃣ Configurar no Projeto
+                1. Abra o arquivo: **`.streamlit/secrets.toml`**
+                2. Substitua `COLE_SUA_CHAVE_API_AQUI` pela sua chave
+                3. Salve o arquivo (Ctrl+S)
+                
+                **Exemplo:**
+                ```toml
+                GEMINI_API_KEY = "AIzaSyBxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+                ```
+                
+                ### 3️⃣ Recarregar Dashboard
+                - Pressione **R** no terminal do Streamlit
+                - Ou atualize a página (F5)
+                
+                ---
+                
+                💡 **Dica:** O arquivo `secrets.toml` já está criado e pronto para uso!  
+                🔒 **Segurança:** Sua chave não será enviada ao GitHub (está no .gitignore)
+                """)
+            
+            st.info("📚 Enquanto isso, você pode usar o **Glossário de Termos** abaixo! 👇")
             api_key = None
-        else:
-            genai.configure(api_key=api_key)
+            
     except Exception as e:
-        st.error(f"Erro ao configurar Gemini: {str(e)}")
+        st.error(f"❌ **Erro ao configurar Gemini:** {str(e)}")
+        st.info("Verifique se a chave API foi copiada corretamente e tente novamente.")
         api_key = None
     
     if api_key:
