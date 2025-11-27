@@ -790,6 +790,150 @@ elif secao == "🔬 Metodologia":
     </div>
     """, unsafe_allow_html=True)
     
+    # Quadro de Variáveis da Pesquisa
+    st.markdown("---")
+    st.markdown("#### 📋 Quadro de Variáveis da Pesquisa")
+    
+    st.markdown("""
+    <div class="section-card">
+    <h4 style="text-align: center; margin-bottom: 20px;">Quadro 2 - Identificação e Caracterização das Variáveis</h4>
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
+        <thead style="background-color: #667eea; color: white;">
+            <tr>
+                <th style="padding: 12px; border: 1px solid #ddd; text-align: left; width: 5%;">Cód.</th>
+                <th style="padding: 12px; border: 1px solid #ddd; text-align: left; width: 18%;">Variável</th>
+                <th style="padding: 12px; border: 1px solid #ddd; text-align: left; width: 10%;">Tipo</th>
+                <th style="padding: 12px; border: 1px solid #ddd; text-align: left; width: 15%;">Fonte/Ticker</th>
+                <th style="padding: 12px; border: 1px solid #ddd; text-align: left; width: 12%;">Unidade de Medida</th>
+                <th style="padding: 12px; border: 1px solid #ddd; text-align: left; width: 25%;">Descrição/Cálculo</th>
+                <th style="padding: 12px; border: 1px solid #ddd; text-align: center; width: 15%;">Período/Frequência</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Variáveis Dependentes -->
+            <tr style="background-color: #e8eaf6;">
+                <td colspan="7" style="padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #5c6bc0; color: white;">
+                    VARIÁVEIS DEPENDENTES
+                </td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>Y₁</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>Retorno S&P 500</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Dependente<br>(Contínua)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Yahoo Finance<br>^GSPC</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Percentual (%)<br>logarítmico</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">R<sub>t</sub> = ln(P<sub>t</sub> / P<sub>t-1</sub>)<br>
+                    Variação diária do índice S&P 500</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">2022-2024<br>Diária<br>(752 obs.)</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>Y₂</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>Índice VIX</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Dependente<br>(Contínua)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Yahoo Finance<br>^VIX</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Pontos<br>percentuais</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Volatilidade implícita de 30 dias<br>
+                    ("Índice do Medo")</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">2022-2024<br>Diária<br>(752 obs.)</td>
+            </tr>
+            
+            <!-- Variável Independente Principal -->
+            <tr style="background-color: #e8eaf6;">
+                <td colspan="7" style="padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #7e57c2; color: white;">
+                    VARIÁVEL INDEPENDENTE PRINCIPAL
+                </td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>X₁</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>Retorno Big Tech<br>(Magnificent Seven)</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Independente<br>(Contínua)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Yahoo Finance<br>AAPL, MSFT, GOOGL,<br>AMZN, NVDA, TSLA, META</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Percentual (%)<br>logarítmico</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Média ponderada por capitalização<br>
+                    dos retornos das 7 empresas</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">2022-2024<br>Diária<br>(752 obs.)</td>
+            </tr>
+            
+            <!-- Variável de Controle -->
+            <tr style="background-color: #e8eaf6;">
+                <td colspan="7" style="padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #9575cd; color: white;">
+                    VARIÁVEL DE CONTROLE
+                </td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><strong>X₂</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;"><strong>Taxa de Juros<br>10 Anos (US)</strong></td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Controle<br>(Contínua)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Yahoo Finance<br>^TNX</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Percentual (% a.a.)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Yield dos Treasury Notes de 10 anos<br>
+                    (Taxa livre de risco)</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">2022-2024<br>Diária<br>(752 obs.)</td>
+            </tr>
+            
+            <!-- Componentes da Variável X₁ -->
+            <tr style="background-color: #e8eaf6;">
+                <td colspan="7" style="padding: 8px; border: 1px solid #ddd; font-weight: bold; background-color: #b39ddb; color: white;">
+                    COMPONENTES DO BIG TECH INDEX (X₁)
+                </td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">C₁</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Apple Inc.</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;" rowspan="7">Componentes<br>(Ação)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">AAPL</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;" rowspan="7">USD ($)<br>Preço/ação</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;" rowspan="7">Preços de fechamento ajustados<br>
+                    para dividendos e desdobramentos</td>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;" rowspan="7">2022-2024<br>Diária<br>(752 obs.)</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">C₂</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Microsoft Corp.</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">MSFT</td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">C₃</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Alphabet Inc. (Google)</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">GOOGL</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">C₄</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Amazon.com Inc.</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">AMZN</td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">C₅</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">NVIDIA Corp.</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">NVDA</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">C₆</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Tesla Inc.</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">TSLA</td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">C₇</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Meta Platforms Inc.</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">META</td>
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class="section-card" style="margin-top: 15px;">
+    <p style="font-size: 0.9rem; color: #666; text-align: justify;">
+    <strong>Fonte:</strong> Elaborado pelo autor (2025).<br>
+    <strong>Nota 1:</strong> Todas as séries possuem 752 observações diárias (dias úteis) no período de 01/01/2022 a 31/12/2024.<br>
+    <strong>Nota 2:</strong> Os retornos logarítmicos resultam em 751 observações devido à diferenciação temporal.<br>
+    <strong>Nota 3:</strong> O Big Tech Index (X₁) é calculado como média ponderada pela capitalização de mercado diária das 7 empresas.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("---")
     st.markdown("#### 📝 Procedimentos de Coleta")
     
     tab1, tab2, tab3 = st.tabs(["1️⃣ Extração", "2️⃣ Cálculo", "3️⃣ Ponderação"])
