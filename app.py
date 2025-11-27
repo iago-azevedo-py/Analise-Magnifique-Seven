@@ -1366,11 +1366,6 @@ elif secao == "📊 Dados Coletados":
     
     else:
         st.warning("⚠️ Dados ainda não coletados. Execute o script `coletar_dados.py` primeiro.")
-        
-        st.code("""
-# Execute no terminal:
-python coletar_dados.py
-        """, language='bash')
 
 elif secao == "📈 Análise Estatística":
     st.markdown('<div class="sub-header">📈 Análise Estatística</div>', unsafe_allow_html=True)
