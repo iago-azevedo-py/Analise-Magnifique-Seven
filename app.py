@@ -794,7 +794,122 @@ elif secao == "🔬 Metodologia":
     st.markdown("---")
     st.markdown("#### 📋 Quadro de Variáveis da Pesquisa")
     
-    st.markdown("""
+    st.markdown("##### Quadro 2 - Identificação e Caracterização das Variáveis")
+    
+    # Criar DataFrame para o quadro
+    import pandas as pd
+    
+    dados_quadro = {
+        'Cód.': ['Y₁', 'Y₂', 'X₁', 'X₂', 'C₁', 'C₂', 'C₃', 'C₄', 'C₅', 'C₆', 'C₇'],
+        'Variável': [
+            'Retorno S&P 500',
+            'Índice VIX',
+            'Retorno Big Tech (Magnificent Seven)',
+            'Taxa de Juros 10 Anos (US)',
+            'Apple Inc.',
+            'Microsoft Corp.',
+            'Alphabet Inc. (Google)',
+            'Amazon.com Inc.',
+            'NVIDIA Corp.',
+            'Tesla Inc.',
+            'Meta Platforms Inc.'
+        ],
+        'Tipo': [
+            'Dependente (Contínua)',
+            'Dependente (Contínua)',
+            'Independente (Contínua)',
+            'Controle (Contínua)',
+            'Componente (Ação)',
+            'Componente (Ação)',
+            'Componente (Ação)',
+            'Componente (Ação)',
+            'Componente (Ação)',
+            'Componente (Ação)',
+            'Componente (Ação)'
+        ],
+        'Fonte/Ticker': [
+            'Yahoo Finance (^GSPC)',
+            'Yahoo Finance (^VIX)',
+            'Yahoo Finance (AAPL, MSFT, GOOGL, AMZN, NVDA, TSLA, META)',
+            'Yahoo Finance (^TNX)',
+            'AAPL',
+            'MSFT',
+            'GOOGL',
+            'AMZN',
+            'NVDA',
+            'TSLA',
+            'META'
+        ],
+        'Unidade': [
+            'Percentual (%) log',
+            'Pontos percentuais',
+            'Percentual (%) log',
+            'Percentual (% a.a.)',
+            'USD ($) Preço/ação',
+            'USD ($) Preço/ação',
+            'USD ($) Preço/ação',
+            'USD ($) Preço/ação',
+            'USD ($) Preço/ação',
+            'USD ($) Preço/ação',
+            'USD ($) Preço/ação'
+        ],
+        'Descrição/Cálculo': [
+            'Rt = ln(Pt / Pt-1) - Variação diária do índice',
+            'Volatilidade implícita de 30 dias ("Índice do Medo")',
+            'Média ponderada por capitalização dos retornos das 7 empresas',
+            'Yield dos Treasury Notes de 10 anos (Taxa livre de risco)',
+            'Preços de fechamento ajustados',
+            'Preços de fechamento ajustados',
+            'Preços de fechamento ajustados',
+            'Preços de fechamento ajustados',
+            'Preços de fechamento ajustados',
+            'Preços de fechamento ajustados',
+            'Preços de fechamento ajustados'
+        ],
+        'Período': [
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)',
+            '2022-2024 Diária (752 obs.)'
+        ]
+    }
+    
+    df_quadro = pd.DataFrame(dados_quadro)
+    
+    # Estilizar o dataframe
+    def highlight_rows(row):
+        if row['Cód.'] in ['Y₁', 'Y₂']:
+            return ['background-color: #e3f2fd'] * len(row)
+        elif row['Cód.'] == 'X₁':
+            return ['background-color: #f3e5f5'] * len(row)
+        elif row['Cód.'] == 'X₂':
+            return ['background-color: #ede7f6'] * len(row)
+        else:
+            return ['background-color: #f5f5f5'] * len(row)
+    
+    st.dataframe(
+        df_quadro.style.apply(highlight_rows, axis=1),
+        use_container_width=True,
+        height=500
+    )
+    
+    st.info("""
+    **Fonte:** Elaborado pelo autor (2025).  
+    **Nota 1:** Todas as séries possuem 752 observações diárias (dias úteis) no período de 01/01/2022 a 31/12/2024.  
+    **Nota 2:** Os retornos logarítmicos resultam em 751 observações devido à diferenciação temporal.  
+    **Nota 3:** O Big Tech Index (X₁) é calculado como média ponderada pela capitalização de mercado diária das 7 empresas.
+    """)
+    
+    # Remover todo o HTML antigo
+    if False:  # Código HTML antigo desativado
+        st.markdown("""
     <div class="section-card">
     <h4 style="text-align: center; margin-bottom: 20px;">Quadro 2 - Identificação e Caracterização das Variáveis</h4>
     <table style="width: 100%; border-collapse: collapse; font-size: 0.95rem;">
@@ -919,17 +1034,6 @@ elif secao == "🔬 Metodologia":
             </tr>
         </tbody>
     </table>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div class="section-card" style="margin-top: 15px;">
-    <p style="font-size: 0.9rem; color: #666; text-align: justify;">
-    <strong>Fonte:</strong> Elaborado pelo autor (2025).<br>
-    <strong>Nota 1:</strong> Todas as séries possuem 752 observações diárias (dias úteis) no período de 01/01/2022 a 31/12/2024.<br>
-    <strong>Nota 2:</strong> Os retornos logarítmicos resultam em 751 observações devido à diferenciação temporal.<br>
-    <strong>Nota 3:</strong> O Big Tech Index (X₁) é calculado como média ponderada pela capitalização de mercado diária das 7 empresas.
-    </p>
     </div>
     """, unsafe_allow_html=True)
     
