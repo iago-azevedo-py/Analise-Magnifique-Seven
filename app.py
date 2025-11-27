@@ -474,6 +474,279 @@ elif secao == "📚 Referencial Teórico":
     </p>
     </div>
     """, unsafe_allow_html=True)
+    
+    # Quadro Teórico
+    st.markdown("---")
+    st.markdown("### 📐 Quadro Teórico da Pesquisa")
+    
+    st.markdown("""
+    <div class="highlight-box">
+    <p style="font-size: 1.05rem; line-height: 1.9; text-align: center;">
+    <strong>Síntese da Fundamentação Teórica e Relações Conceituais</strong>
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Estrutura do Quadro Teórico em 3 colunas
+    col1, col2, col3 = st.columns(3)
+    
+    with col1:
+        st.markdown("""
+        <div class="section-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <h4 style="color: white; text-align: center;">🎯 CONCEITOS-CHAVE</h4>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>📊 S&P 500</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7;">
+        • Benchmark do mercado americano<br>
+        • 500 maiores empresas por capitalização<br>
+        • Ponderado por valor de mercado<br>
+        • <strong>Proxy da economia dos EUA</strong>
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>🚀 Magnificent Seven</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7;">
+        • Apple, Microsoft, Google, Amazon<br>
+        • NVIDIA, Tesla, Meta<br>
+        • ~30% do valor do S&P 500<br>
+        • <strong>Líderes em inovação digital</strong>
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>📉 Índice VIX</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7;">
+        • "Índice do Medo"<br>
+        • Volatilidade implícita (30 dias)<br>
+        • Expectativa de risco do mercado<br>
+        • <strong>Sentimento prospectivo</strong>
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>💵 Taxa de Juros 10Y</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7;">
+        • Treasury Notes (10 anos)<br>
+        • Taxa livre de risco<br>
+        • Indicador de política monetária<br>
+        • <strong>Custo de oportunidade</strong>
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class="section-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+        <h4 style="color: white; text-align: center;">📚 BASE TEÓRICA</h4>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>🔵 Teoria Moderna de Portfólio</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Markowitz (1952)</strong><br>
+        Relação risco-retorno como fundamento da decisão de investimento. 
+        Diversificação reduz risco não-sistemático.
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>🔵 Hipótese dos Mercados Eficientes</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Fama (1970)</strong><br>
+        Preços refletem toda informação disponível. Implica que concentração 
+        de mercado pode criar ineficiências.
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>🔵 Teoria do Risco Sistêmico</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Allen & Gale (2000)</strong><br>
+        Interconexão entre entidades pode gerar efeito cascata. 
+        "Too big to fail" aplicado a Big Tech.
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>🔵 Finanças Comportamentais</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Kahneman & Tversky (1979)</strong><br>
+        Sentimento do investidor influencia precificação. 
+        VIX como proxy do medo e aversão ao risco.
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>🔵 Modelos de Regressão Linear</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Gauss-Markov</strong><br>
+        Método dos Mínimos Quadrados (OLS) para estimar 
+        relações causais entre variáveis econômicas.
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div class="section-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+        <h4 style="color: white; text-align: center;">🔗 HIPÓTESES</h4>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>H₁: Correlação Positiva Forte</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Previsão:</strong> Retorno das Magnificent Seven apresenta 
+        correlação positiva e significativa (ρ > 0.7) com o retorno do S&P 500.
+        </p>
+        <p style="font-size: 0.85rem; color: #666;">
+        <em>Base: Concentração setorial e peso no índice</em>
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>H₂: Poder Preditivo Significativo</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Previsão:</strong> Retorno da Big Tech explica significativamente 
+        a variação do S&P 500 (R² > 60%, p < 0.001).
+        </p>
+        <p style="font-size: 0.85rem; color: #666;">
+        <em>Base: Teoria moderna de portfólio</em>
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>H₃: Impacto na Volatilidade (VIX)</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Previsão:</strong> Retorno da Big Tech tem relação inversa 
+        com o VIX (β₁ < 0, p < 0.05).
+        </p>
+        <p style="font-size: 0.85rem; color: #666;">
+        <em>Base: Finanças comportamentais</em>
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class="section-card">
+        <h5>H₄: Volatilidade Diferenciada</h5>
+        <p style="font-size: 0.95rem; line-height: 1.7; text-align: justify;">
+        <strong>Previsão:</strong> Big Tech apresenta volatilidade superior 
+        ao S&P 500 (σ_bigtech > σ_sp500).
+        </p>
+        <p style="font-size: 0.85rem; color: #666;">
+        <em>Base: Concentração setorial e inovação disruptiva</em>
+        </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Modelo Conceitual Visual
+    st.markdown("---")
+    st.markdown("### 🎯 Modelo Conceitual da Pesquisa")
+    
+    st.markdown("""
+    <div class="highlight-box">
+    <h4 style="text-align: center;">Relações entre Variáveis</h4>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Criar diagrama textual
+    col_a, col_b, col_c = st.columns([1, 2, 1])
+    
+    with col_b:
+        st.markdown("""
+        <div style="background: white; padding: 20px; border-radius: 10px; border: 2px solid #667eea;">
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+        <div style="display: inline-block; padding: 15px 30px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+        color: white; border-radius: 10px; font-size: 1.1rem; font-weight: bold;">
+        🚀 MAGNIFICENT SEVEN<br>(Variável Independente Principal)
+        </div>
+        </div>
+        
+        <div style="text-align: center; margin: 20px 0;">
+        <div style="font-size: 2rem; color: #667eea;">⬇️</div>
+        <div style="color: #666; font-size: 0.9rem; font-style: italic;">Influência Positiva Esperada</div>
+        </div>
+        
+        <div style="display: flex; justify-content: space-around; margin-top: 20px;">
+        
+        <div style="flex: 1; margin: 0 10px;">
+        <div style="padding: 15px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+        color: white; border-radius: 10px; text-align: center; font-weight: bold;">
+        📈 RETORNO S&P 500<br>(Variável Dependente 1)
+        </div>
+        <div style="text-align: center; margin-top: 10px; font-size: 0.85rem; color: #666;">
+        Modelo 1: OLS<br>R² esperado > 60%
+        </div>
+        </div>
+        
+        <div style="flex: 1; margin: 0 10px;">
+        <div style="padding: 15px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+        color: white; border-radius: 10px; text-align: center; font-weight: bold;">
+        📉 VOLATILIDADE (VIX)<br>(Variável Dependente 2)
+        </div>
+        <div style="text-align: center; margin-top: 10px; font-size: 0.85rem; color: #666;">
+        Modelo 2: OLS<br>β₁ esperado < 0
+        </div>
+        </div>
+        
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; padding: 15px; background: #f8f9fa; border-radius: 10px;">
+        <div style="font-weight: bold; color: #333; margin-bottom: 10px;">VARIÁVEIS DE CONTROLE</div>
+        <div style="font-size: 0.9rem; color: #666;">
+        💵 Taxa de Juros 10Y &nbsp;|&nbsp; 📊 Tendência Temporal
+        </div>
+        </div>
+        
+        </div>
+        """, unsafe_allow_html=True)
+    
+    # Resumo do Quadro Teórico
+    st.markdown("---")
+    st.markdown("""
+    <div class="section-card">
+    <h4>📋 Resumo: Estrutura Teórico-Metodológica</h4>
+    <p style="font-size: 1.05rem; line-height: 1.9; text-align: justify;">
+    Este quadro teórico integra a <strong>Teoria Moderna de Portfólio</strong>, 
+    <strong>Hipótese dos Mercados Eficientes</strong>, <strong>Teoria do Risco Sistêmico</strong> 
+    e <strong>Finanças Comportamentais</strong> para fundamentar a investigação empírica da 
+    influência das Magnificent Seven sobre o S&P 500.
+    </p>
+    <p style="font-size: 1.05rem; line-height: 1.9; text-align: justify;">
+    A metodologia quantitativa, baseada em <strong>modelos de regressão linear (OLS)</strong>, 
+    permite testar as hipóteses formuladas e quantificar o impacto das Big Tech sobre o 
+    retorno e a volatilidade do mercado americano no período 2022-2024.
+    </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 elif secao == "🔬 Metodologia":
     st.markdown('<div class="sub-header">3. Metodologia</div>', unsafe_allow_html=True)
